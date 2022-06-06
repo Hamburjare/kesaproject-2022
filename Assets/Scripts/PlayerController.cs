@@ -6,9 +6,9 @@ public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D rb2d;
 
-    [SerializeField] private float moveSpeed;
+    private float moveSpeed;
 
-    [SerializeField] private float jumpForce;
+    private float jumpForce;
 
     public KeyCode left;
     public KeyCode right;
@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(jump))
         {
 
-            // Kyll�, joten pelihahmo hypp��
+
             rb2d.velocity = new Vector2(rb2d.velocity.x, jumpForce);
         }
     }
