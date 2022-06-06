@@ -13,7 +13,7 @@ public class Infect : MonoBehaviour
         m_SpriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    private void OnCollisionEnter2D(Collision2D other) {
+    private void OnTriggerEnter2D(Collider2D other) {
         if (other.gameObject.tag == "Player") {
             m_NewColor = new Color(0, 1, 0, 1);
             m_SpriteRenderer.color = m_NewColor;

@@ -6,49 +6,47 @@ public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D rb2d;
 
-    private float moveSpeed;
+    public float moveSpeed = 10f;
 
-    private float jumpForce;
+    public float jumpForce = 10f;
 
     public KeyCode left;
     public KeyCode right;
     public KeyCode jump;
 
+    public bool automaticRunning = true; //PROTOTYPING ONLY
+
     // Start is called before the first frame update
     void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
-        jumpForce = 10f;
-        moveSpeed = 10f;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     void FixedUpdate()
     {
-        if (Input.GetKey(left))
+        if (!automaticRunning)
         {
-            rb2d.velocity = new Vector2(-moveSpeed, rb2d.velocity.y);
-            // spriteRenderer.flipX = true;
-        }
-        else if (Input.GetKey(right))
-        {
-            rb2d.velocity = new Vector2(moveSpeed, rb2d.velocity.y);
-            // spriteRenderer.flipX = false;
+            if (Input.GetKey(left))
+            {
+                rb2d.velocity = new Vector2(-moveSpeed, rb2d.velocity.y);
+            }
+            else if (Input.GetKey(right))
+            {
+                rb2d.velocity = new Vector2(moveSpeed, rb2d.velocity.y);
+            }
+            else
+            {
+                rb2d.velocity = new Vector2(0, rb2d.velocity.y);
+            }
         }
         else
         {
-            rb2d.velocity = new Vector2(0, rb2d.velocity.y);
+            rb2d.velocity = new Vector2(moveSpeed, rb2d.velocity.y);
         }
+
 
         if (Input.GetKey(jump))
         {
-
-
             rb2d.velocity = new Vector2(rb2d.velocity.x, jumpForce);
         }
     }
