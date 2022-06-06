@@ -6,9 +6,9 @@ public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D rb2d;
 
-    [SerializeField] private float moveSpeed = 10f;
+    [SerializeField] private float moveSpeed;
 
-    [SerializeField] private float jumpForce = 10f;
+    [SerializeField] private float jumpForce;
 
     public KeyCode left;
     public KeyCode right;
@@ -18,13 +18,14 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
-        
+        jumpForce = 10f;
+        moveSpeed = 10f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     void FixedUpdate()
@@ -44,7 +45,7 @@ public class PlayerController : MonoBehaviour
             rb2d.velocity = new Vector2(0, rb2d.velocity.y);
         }
 
-        if (Input.GetKeyDown(jump))
+        if (Input.GetKey(jump))
         {
 
             // Kyll�, joten pelihahmo hypp��
