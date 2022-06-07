@@ -26,6 +26,8 @@ public class LevelGenerator : MonoBehaviour
 
     void Update()
     {
+        /* Checking if the player is close enough to the end of the level. If it is, it generates a new
+        level. */
         if (Vector3.Distance(player.transform.position, lastEndPosition) < playerDistanceEndPosition)
         {
             GenerateLevel();
@@ -34,6 +36,7 @@ public class LevelGenerator : MonoBehaviour
 
     private void GenerateLevel()
     {
+        /* Generating a random level from the list of levels and then it is generating the level. */
         Transform randomLevelGenerator = levelPrefabsList[Random.Range(0, levelPrefabsList.Count)];
         Transform lastLevelEndTransform = GenerateLevel(randomLevelGenerator, lastEndPosition);
         lastEndPosition = lastLevelEndTransform.Find("EndPosition").position;
