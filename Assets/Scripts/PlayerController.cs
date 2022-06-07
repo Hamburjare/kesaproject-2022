@@ -49,5 +49,11 @@ public class PlayerController : MonoBehaviour
         {
             rb2d.velocity = new Vector2(rb2d.velocity.x, jumpForce);
         }
+
+        /* Making sure that the player does not go above the y position of 20. */
+        if (transform.position.y >= 20)
+        {
+            transform.position = new Vector3(transform.position.x, 20, transform.position.z);
+        }
     }
 }
