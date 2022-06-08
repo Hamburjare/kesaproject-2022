@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController Instance;
+
     private Rigidbody2D rb2d;
 
     public float moveSpeed = 10f;
@@ -15,6 +17,17 @@ public class PlayerController : MonoBehaviour
     public KeyCode jump;
 
     public bool automaticRunning = true; //PROTOTYPING ONLY
+
+    void Awake()
+    {
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+
+    }
 
     // Start is called before the first frame update
     void Start()

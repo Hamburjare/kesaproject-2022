@@ -9,7 +9,6 @@ public class GameManager : MonoBehaviour
 
     public float score { get; private set; }
 
-    // Start is called before the first frame update
     void Awake()
     {
         if (Instance != null)
