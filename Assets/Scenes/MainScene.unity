@@ -659,10 +659,10 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0, y: 20}
+    - - {x: 10, y: 20}
       - {x: -10, y: 20}
       - {x: -10, y: -0.5}
-      - {x: 99999, y: -0.5}
+      - {x: 10, y: -0.5}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -837,7 +837,7 @@ MonoBehaviour:
   m_LookaheadSmoothing: 10
   m_LookaheadIgnoreY: 1
   m_XDamping: 1
-  m_YDamping: 1
+  m_YDamping: 6
   m_ZDamping: 0
   m_TargetMovementOnly: 1
   m_ScreenX: 0.5
@@ -1842,6 +1842,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 4066883988291730030, guid: cde00eae1ef920e43bccb34e2b57cbac, type: 3}
+      propertyPath: jumpForce
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 4066883988291730031, guid: cde00eae1ef920e43bccb34e2b57cbac, type: 3}
+      propertyPath: m_Mass
+      value: 60
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cde00eae1ef920e43bccb34e2b57cbac, type: 3}
 --- !u!1 &4270915042733767623
@@ -1965,7 +1973,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e23c7cca56445c84dbcce6c5d05f1f95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
 --- !u!61 &6609437973742888470
 BoxCollider2D:
   m_ObjectHideFlags: 0

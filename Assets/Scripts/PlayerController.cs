@@ -10,11 +10,16 @@ public class PlayerController : MonoBehaviour
 
     public float moveSpeed = 10f;
 
-    public float jumpForce = 10f;
+    public float jumpForce = 20f;
 
     public KeyCode left;
     public KeyCode right;
     public KeyCode jump;
+
+    public Transform groundCheckPoint;
+    public float groundCheckRadius;
+    public LayerMask whatIsGround;
+    private bool isGround;
 
     // public bool automaticRunning = true; //PROTOTYPING ONLY
 
@@ -33,6 +38,11 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
+    }
+
+    void Update()
+    {
+        isGround = Physics2D.OverlapCircle(groundCheckPoint.position, groundCheckRadius, whatIsGround);
     }
 
     void FixedUpdate()
@@ -58,7 +68,7 @@ public class PlayerController : MonoBehaviour
         // }
 
 
-        if (Input.GetKey(jump))
+        if (Input.GetKey(jump) && isGround)
         {
             rb2d.velocity = new Vector2(rb2d.velocity.x, jumpForce);
         }
