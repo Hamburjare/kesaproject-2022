@@ -19,8 +19,6 @@ public class GameManager : MonoBehaviour
             return;
         }
         Instance = this;
-        LoadScore();
-        Debug.Log($"Score: {score}");
     }
 
     // Update is called once per frame
