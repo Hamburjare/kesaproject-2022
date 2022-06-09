@@ -105,7 +105,7 @@ MonoBehaviour:
   left: 97
   right: 100
   jump: 32
-  automaticRunning: 1
+  automaticRunning: 0
 --- !u!50 &4066883988291730031
 Rigidbody2D:
   serializedVersion: 4
@@ -126,7 +126,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 5
 --- !u!61 &31453227
 BoxCollider2D:
   m_ObjectHideFlags: 0

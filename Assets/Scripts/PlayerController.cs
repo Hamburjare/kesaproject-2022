@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     public KeyCode right;
     public KeyCode jump;
 
-    public bool automaticRunning = true; //PROTOTYPING ONLY
+    // public bool automaticRunning = true; //PROTOTYPING ONLY
 
     void Awake()
     {
@@ -37,25 +37,25 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!automaticRunning)
-        {
-            if (Input.GetKey(left))
-            {
-                rb2d.velocity = new Vector2(-moveSpeed, rb2d.velocity.y);
-            }
-            else if (Input.GetKey(right))
-            {
-                rb2d.velocity = new Vector2(moveSpeed, rb2d.velocity.y);
-            }
-            else
-            {
-                rb2d.velocity = new Vector2(0, rb2d.velocity.y);
-            }
-        }
-        else
-        {
-            rb2d.velocity = new Vector2(moveSpeed, rb2d.velocity.y);
-        }
+        // if (!automaticRunning)
+        // {
+        //     if (Input.GetKey(left))
+        //     {
+        //         rb2d.velocity = new Vector2(-moveSpeed, rb2d.velocity.y);
+        //     }
+        //     else if (Input.GetKey(right))
+        //     {
+        //         rb2d.velocity = new Vector2(moveSpeed, rb2d.velocity.y);
+        //     }
+        //     else
+        //     {
+        //         rb2d.velocity = new Vector2(0, rb2d.velocity.y);
+        //     }
+        // }
+        // else
+        // {
+        //     rb2d.velocity = new Vector2(moveSpeed, rb2d.velocity.y);
+        // }
 
 
         if (Input.GetKey(jump))

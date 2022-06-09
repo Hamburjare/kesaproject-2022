@@ -10,7 +10,7 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] private List<Transform> levelPrefabsList;
 
     [SerializeField] private GameObject player;
-
+    Transform lastLevelEndTransform;
     private Vector3 lastEndPosition;
     private void Awake()
     {
@@ -28,18 +28,20 @@ public class LevelGenerator : MonoBehaviour
     {
         /* Checking if the player is close enough to the end of the level. If it is, it generates a new
         level. */
+        lastEndPosition = lastLevelEndTransform.Find("EndPosition").position;
         if (Vector3.Distance(player.transform.position, lastEndPosition) < playerDistanceEndPosition)
         {
             GenerateLevel();
         }
+        
     }
 
     private void GenerateLevel()
     {
         /* Generating a random level from the list of levels and then it is generating the level. */
         Transform randomLevelGenerator = levelPrefabsList[Random.Range(0, levelPrefabsList.Count)];
-        Transform lastLevelEndTransform = GenerateLevel(randomLevelGenerator, lastEndPosition);
-        lastEndPosition = lastLevelEndTransform.Find("EndPosition").position;
+        lastLevelEndTransform = GenerateLevel(randomLevelGenerator, lastEndPosition);
+
     }
 
     private Transform GenerateLevel(Transform levelToGenerate, Vector3 spawnPosition)
