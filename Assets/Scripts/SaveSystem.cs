@@ -4,12 +4,13 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public static class SaveSystem
 {
+    static string scoreFilePath = Application.persistentDataPath + "/score.keskikalja";
 
     public static void SaveScore(GameManager scoreData)
     {
         BinaryFormatter formatter = new BinaryFormatter();
-        string path = Application.persistentDataPath + "/score.keskikalja";
-        FileStream stream = new FileStream(path, FileMode.Create);
+        
+        FileStream stream = new FileStream(scoreFilePath, FileMode.Create);
 
         ScoreData data = new ScoreData(scoreData);
 
@@ -19,11 +20,10 @@ public static class SaveSystem
 
     public static ScoreData LoadScore()
     {
-        string path = Application.persistentDataPath + "/score.keskikalja";
-        if (File.Exists(path))
+        if (File.Exists(scoreFilePath))
         {
             BinaryFormatter formatter = new BinaryFormatter();
-            FileStream stream = new FileStream(path, FileMode.Open);
+            FileStream stream = new FileStream(scoreFilePath, FileMode.Open);
             ScoreData data = formatter.Deserialize(stream) as ScoreData;
             stream.Close();
 
@@ -32,7 +32,7 @@ public static class SaveSystem
         }
         else
         {
-            Debug.LogError("Save file not found in" + path);
+            Debug.LogError("Save file not found in" + scoreFilePath);
             return null;
         }
     }
