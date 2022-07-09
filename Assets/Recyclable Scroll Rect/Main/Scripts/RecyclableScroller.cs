@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 using UnityEngine;
 using PolyAndCode.UI;
 
@@ -12,11 +13,11 @@ using PolyAndCode.UI;
 public struct ContactInfo
 {
     public string Name;
-    public string Gender;
-    public string id;
+    public string Price;
+    public Sprite Image;
 }
 
-public class RecyclableScrollerDemo : MonoBehaviour, IRecyclableScrollRectDataSource
+public class RecyclableScroller : MonoBehaviour, IRecyclableScrollRectDataSource
 {
     [SerializeField]
     RecyclableScrollRect _recyclableScrollRect;
@@ -25,11 +26,16 @@ public class RecyclableScrollerDemo : MonoBehaviour, IRecyclableScrollRectDataSo
     private int _dataLength;
 
     //Dummy data List
-    private List<ContactInfo> _contactList = new List<ContactInfo>();
+    List<ContactInfo> _contactList = new List<ContactInfo>();
+
+    [SerializeField]
+    List<Sprite> _sprites = new List<Sprite>();
 
     //Recyclable scroll rect's data source must be assigned in Awake.
     private void Awake()
     {
+        _dataLength = _sprites.Count;
+
         InitData();
         _recyclableScrollRect.DataSource = this;
     }
@@ -39,13 +45,22 @@ public class RecyclableScrollerDemo : MonoBehaviour, IRecyclableScrollRectDataSo
     {
         if (_contactList != null) _contactList.Clear();
 
-        string[] genders = { "Male", "Female" };
+        string[] skinNames = { "Zombie", "Pirate Zombie", "Skeleton", "Pirate Skeleton" };
+        long[] priceTags = { 0, 10000, 99999, 999999999999 };
         for (int i = 0; i < _dataLength; i++)
         {
             ContactInfo obj = new ContactInfo();
-            obj.Name = i + "_Name";
-            obj.Gender = genders[Random.Range(0, 2)];
-            obj.id = "item : " + i;
+
+            priceTags[i] = Math.Abs(priceTags[i]);
+            if (priceTags[i] == 0)
+            {
+                obj.Price = "Owned";
+            }
+            else obj.Price = string.Format("{0, -15:N0}", priceTags[i]);
+
+            obj.Name = skinNames[i];
+            obj.Image = _sprites[i];
+
             _contactList.Add(obj);
         }
     }
@@ -67,7 +82,7 @@ public class RecyclableScrollerDemo : MonoBehaviour, IRecyclableScrollRectDataSo
     public void SetCell(ICell cell, int index)
     {
         //Casting to the implemented Cell
-        var item = cell as DemoCell;
+        var item = cell as Cell;
         item.ConfigureCell(_contactList[index], index);
     }
 
