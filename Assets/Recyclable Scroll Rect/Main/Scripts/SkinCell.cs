@@ -7,7 +7,7 @@ using PolyAndCode.UI;
 //The class is required to configure the cell(updating UI elements etc) according to the data during recycling of cells.
 //The configuration of a cell is done through the DataSource SetCellData method.
 //Check RecyclableScrollerDemo class
-public class Cell : MonoBehaviour, ICell
+public class SkinCell : MonoBehaviour, ICell
 {
     //UI
     public TextMeshProUGUI priceLabel;
@@ -17,7 +17,7 @@ public class Cell : MonoBehaviour, ICell
     public Button cellButton;
 
     //Model
-    private ContactInfo _contactInfo;
+    private SkinInfo _SkinInfo;
     private int _cellIndex;
 
     private void Start()
@@ -27,19 +27,19 @@ public class Cell : MonoBehaviour, ICell
     }
 
     //This is called from the SetCell method in DataSource
-    public void ConfigureCell(ContactInfo contactInfo,int cellIndex)
+    public void ConfigureCell(SkinInfo SkinInfo,int cellIndex)
     {
         _cellIndex = cellIndex;
-        _contactInfo = contactInfo;
+        _SkinInfo = SkinInfo;
 
-        priceLabel.text = contactInfo.Price;
-        nameLabel.text = contactInfo.Name;
-        ImageLabel.sprite = contactInfo.Image;
+        priceLabel.text = SkinInfo.Price;
+        nameLabel.text = SkinInfo.Name;
+        ImageLabel.sprite = SkinInfo.Image;
     }
 
     
     private void ButtonListener()
     {
-        Debug.Log($"Index : {_cellIndex}, Price : {_contactInfo.Price}, Name : {_contactInfo.Name}, Image Name : {_contactInfo.Image.name}");
+        Debug.Log($"Index : {_cellIndex}, Price : {_SkinInfo.Price}, Name : {_SkinInfo.Name}, Image Name : {_SkinInfo.Image.name}");
     }
 }

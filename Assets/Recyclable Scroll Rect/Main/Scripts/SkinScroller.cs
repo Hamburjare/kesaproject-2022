@@ -10,14 +10,14 @@ using PolyAndCode.UI;
 /// </summary>
 
 //Dummy Data model for demostraion
-public struct ContactInfo
+public struct SkinInfo
 {
     public string Name;
     public string Price;
     public Sprite Image;
 }
 
-public class RecyclableScroller : MonoBehaviour, IRecyclableScrollRectDataSource
+public class SkinScroller : MonoBehaviour, IRecyclableScrollRectDataSource
 {
     [SerializeField]
     RecyclableScrollRect _recyclableScrollRect;
@@ -26,7 +26,7 @@ public class RecyclableScroller : MonoBehaviour, IRecyclableScrollRectDataSource
     private int _dataLength;
 
     //Dummy data List
-    List<ContactInfo> _contactList = new List<ContactInfo>();
+    List<SkinInfo> _contactList = new List<SkinInfo>();
 
     [SerializeField]
     List<Sprite> _sprites = new List<Sprite>();
@@ -49,7 +49,7 @@ public class RecyclableScroller : MonoBehaviour, IRecyclableScrollRectDataSource
         long[] priceTags = { 0, 10000, 99999, 999999999999 };
         for (int i = 0; i < _dataLength; i++)
         {
-            ContactInfo obj = new ContactInfo();
+            SkinInfo obj = new SkinInfo();
 
             priceTags[i] = Math.Abs(priceTags[i]);
             if (priceTags[i] == 0)
@@ -82,7 +82,7 @@ public class RecyclableScroller : MonoBehaviour, IRecyclableScrollRectDataSource
     public void SetCell(ICell cell, int index)
     {
         //Casting to the implemented Cell
-        var item = cell as Cell;
+        var item = cell as SkinCell;
         item.ConfigureCell(_contactList[index], index);
     }
 
