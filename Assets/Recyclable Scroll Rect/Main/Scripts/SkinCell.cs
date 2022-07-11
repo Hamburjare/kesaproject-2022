@@ -20,6 +20,7 @@ public class SkinCell : MonoBehaviour, ICell
     private SkinInfo _SkinInfo;
     private int _cellIndex;
 
+
     private void Start()
     {
         //Can also be done in the inspector
@@ -39,7 +40,7 @@ public class SkinCell : MonoBehaviour, ICell
 
     private void ButtonListener()
     {
-        SkinScroller.Instance.ButtonAction(_cellIndex);
+        UIManager.Instance.SkinButton(_cellIndex);
     }
 
 }

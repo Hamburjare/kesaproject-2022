@@ -14,6 +14,8 @@ using UnityEditor;
 
 public class UIManager : MonoBehaviour
 {
+    public static UIManager Instance;
+
     [SerializeField]
     // Starts skin menu open
     GameObject lastPressed;
@@ -26,6 +28,12 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
         lastPressed.GetComponent<Animator>().Play("ButtonUp");
     }
 
@@ -37,7 +45,7 @@ public class UIManager : MonoBehaviour
     public void ButtonPress(int index)
     {
         EventSystem currentEvent = EventSystem.current;
-        GameObject selectedBtn = currentEvent.currentSelectedGameObject;
+        GameObject justPressed = currentEvent.currentSelectedGameObject;
 
         switch (index)
         {
@@ -49,9 +57,9 @@ public class UIManager : MonoBehaviour
 
             // Perks Button
             case 1:
-                CheckLastPress(selectedBtn);
+                CheckLastPress(justPressed);
 
-                Debug.Log($"{index} {selectedBtn.transform.position}");
+                Debug.Log($"{index} {justPressed.transform.position}");
 
                 break;
 
@@ -59,41 +67,49 @@ public class UIManager : MonoBehaviour
             case 2:
                 skinList.SetActive(true);
                 themeList.SetActive(false);
-                CheckLastPress(selectedBtn);
-                Debug.Log($"{index} {selectedBtn.transform.position}");
+                CheckLastPress(justPressed);
+                Debug.Log($"{index} {justPressed.transform.position}");
                 break;
 
             // Theme Button
             case 3:
                 skinList.SetActive(false);
                 themeList.SetActive(true);
-                CheckLastPress(selectedBtn);
-                Debug.Log($"{index} {selectedBtn.transform.position}");
+                CheckLastPress(justPressed);
+                Debug.Log($"{index} {justPressed.transform.position}");
                 break;
 
             // Shop Button
             case 4:
-                CheckLastPress(selectedBtn);
-                Debug.Log($"{index} {selectedBtn.transform.position}");
+                CheckLastPress(justPressed);
+                Debug.Log($"{index} {justPressed.transform.position}");
                 break;
 
         }
     }
 
-    void CheckLastPress(GameObject selectedBtn)
+    void CheckLastPress(GameObject justPressed)
     {
-        Animator _animatorActive = selectedBtn.GetComponent<Animator>();
+        Animator _animatorActive = justPressed.GetComponent<Animator>();
         Animator _animatorPressed = lastPressed.GetComponent<Animator>();
         /* Checking if the last button pressed is the same as the current button pressed. If it is not
         the same, it will move the last button pressed down 15 units and move the current button
         pressed up 15 units. */
-        if (lastPressed != selectedBtn)
+        if (lastPressed != justPressed)
         {
             _animatorActive.Play("ButtonUp");
             _animatorPressed.Play("ButtonDown");
             // lastPressed.transform.position = new Vector3(lastPressed.transform.position.x, lastPressed.transform.position.y - 15);
-            // selectedBtn.transform.position = new Vector3(selectedBtn.transform.position.x, selectedBtn.transform.position.y + 15);
+            // justPressed.transform.position = new Vector3(justPressed.transform.position.x, justPressed.transform.position.y + 15);
         }
-        lastPressed = selectedBtn;
+        lastPressed = justPressed;
     }
+
+    public void SkinButton(int i)
+    {
+        SkinScroller.Skins[] skins = SkinScroller.Instance.skins;
+        Debug.Log($"Index : {i}, Price : {skins[i].price}, Name : {skins[i].name}, Owned : {skins[i].owned}");
+
+    }
+
 }

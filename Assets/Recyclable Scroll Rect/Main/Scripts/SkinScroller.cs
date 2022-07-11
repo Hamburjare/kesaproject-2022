@@ -34,7 +34,7 @@ public class SkinScroller : MonoBehaviour, IRecyclableScrollRectDataSource
 
     string _skinData;
 
-    Skins[] skins;
+    public Skins[] skins {get; set;}
 
     public static SkinScroller Instance;
 
@@ -48,11 +48,11 @@ public class SkinScroller : MonoBehaviour, IRecyclableScrollRectDataSource
             return;
         }
         Instance = this;
-        
+
         LoadSkinData();
         _dataLength = skins.Length;
         SaveSkinData();
-        
+
 
         InitData();
         _recyclableScrollRect.DataSource = this;
@@ -105,15 +105,9 @@ public class SkinScroller : MonoBehaviour, IRecyclableScrollRectDataSource
     #endregion
 
 
-    public void ButtonAction(int i)
-    {
-        Debug.Log($"Index : {i}, Price : {skins[i].price}, Name : {skins[i].name}, Owned : {skins[i].owned}");
-    }
-
-
     [System.Serializable]
 
-    class Skins
+    public class Skins
     {
         public long price;
         public string name;
@@ -132,7 +126,7 @@ public class SkinScroller : MonoBehaviour, IRecyclableScrollRectDataSource
             skinInstance[i].price = skins[i].price;
         }
 
-        
+
 
         //Convert to JSON
         string json = JsonHelper.ToJson(skinInstance, true);
