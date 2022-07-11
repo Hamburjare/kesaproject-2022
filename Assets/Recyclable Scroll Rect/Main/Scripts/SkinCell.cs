@@ -27,7 +27,7 @@ public class SkinCell : MonoBehaviour, ICell
     }
 
     //This is called from the SetCell method in DataSource
-    public void ConfigureCell(SkinInfo SkinInfo,int cellIndex)
+    public void ConfigureCell(SkinInfo SkinInfo, int cellIndex)
     {
         _cellIndex = cellIndex;
         _SkinInfo = SkinInfo;
@@ -37,9 +37,9 @@ public class SkinCell : MonoBehaviour, ICell
         ImageLabel.sprite = SkinInfo.Image;
     }
 
-    
     private void ButtonListener()
     {
-        Debug.Log($"Index : {_cellIndex}, Price : {_SkinInfo.Price}, Name : {_SkinInfo.Name}, Image Name : {_SkinInfo.Image.name}");
+        SkinScroller.Instance.ButtonAction(_cellIndex);
     }
+
 }

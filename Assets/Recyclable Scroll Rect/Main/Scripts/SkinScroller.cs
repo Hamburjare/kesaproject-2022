@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 using PolyAndCode.UI;
+using System.IO;
 
 /// <summary>
 /// Demo controller class for Recyclable Scroll Rect. 
@@ -31,10 +32,27 @@ public class SkinScroller : MonoBehaviour, IRecyclableScrollRectDataSource
     [SerializeField]
     List<Sprite> _sprites = new List<Sprite>();
 
+    string _skinData;
+
+    Skins[] skins;
+
+    public static SkinScroller Instance;
+
     //Recyclable scroll rect's data source must be assigned in Awake.
     private void Awake()
     {
-        _dataLength = _sprites.Count;
+
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        
+        LoadSkinData();
+        _dataLength = skins.Length;
+        SaveSkinData();
+        
 
         InitData();
         _recyclableScrollRect.DataSource = this;
@@ -45,20 +63,18 @@ public class SkinScroller : MonoBehaviour, IRecyclableScrollRectDataSource
     {
         if (_contactList != null) _contactList.Clear();
 
-        string[] skinNames = { "Zombie", "Pirate Zombie", "Skeleton", "Pirate Skeleton" };
-        long[] priceTags = { 0, 10000, 99999, 999999999999 };
         for (int i = 0; i < _dataLength; i++)
         {
             SkinInfo obj = new SkinInfo();
 
-            priceTags[i] = Math.Abs(priceTags[i]);
-            if (priceTags[i] == 0)
+            skins[i].price = Math.Abs(skins[i].price);
+            if (skins[i].owned)
             {
                 obj.Price = "Owned";
             }
-            else obj.Price = string.Format("{0, -15:N0}", priceTags[i]);
+            else obj.Price = string.Format("{0, -15:N0}", skins[i].price);
 
-            obj.Name = skinNames[i];
+            obj.Name = skins[i].name;
             obj.Image = _sprites[i];
 
             _contactList.Add(obj);
@@ -87,4 +103,53 @@ public class SkinScroller : MonoBehaviour, IRecyclableScrollRectDataSource
     }
 
     #endregion
+
+
+    public void ButtonAction(int i)
+    {
+        Debug.Log($"Index : {i}, Price : {skins[i].price}, Name : {skins[i].name}, Owned : {skins[i].owned}");
+    }
+
+
+    [System.Serializable]
+
+    class Skins
+    {
+        public long price;
+        public string name;
+        public bool owned;
+    }
+
+    public void SaveSkinData()
+    {
+        Skins[] skinInstance = new Skins[_dataLength];
+
+        for (int i = 0; i < _dataLength; i++)
+        {
+            skinInstance[i] = new Skins();
+            skinInstance[i].name = skins[i].name;
+            skinInstance[i].owned = skins[i].owned;
+            skinInstance[i].price = skins[i].price;
+        }
+
+        
+
+        //Convert to JSON
+        string json = JsonHelper.ToJson(skinInstance, true);
+        File.WriteAllText(Application.persistentDataPath + "/skins.json", json);
+    }
+
+    public void LoadSkinData()
+    {
+
+        string path = Application.persistentDataPath + "/skins.json";
+        if (File.Exists(path))
+        {
+
+            string json = File.ReadAllText(path);
+            skins = JsonHelper.FromJson<Skins>(json);
+
+        }
+    }
+
 }
