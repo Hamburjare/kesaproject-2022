@@ -32,14 +32,14 @@ public class ThemeCell : MonoBehaviour, ICell
         _cellIndex = cellIndex;
         _ThemeInfo = ThemeInfo;
 
-        priceLabel.text = ThemeInfo.Price;
-        nameLabel.text = ThemeInfo.Name;
-        ImageLabel.sprite = ThemeInfo.Image;
+        priceLabel.text = ThemeInfo.price;
+        nameLabel.text = ThemeInfo.name;
+        ImageLabel.sprite = ThemeInfo.image;
     }
 
     
     private void ButtonListener()
     {
-        Debug.Log($"Index : {_cellIndex}, Price : {_ThemeInfo.Price}, Name : {_ThemeInfo.Name}, Image Name : {_ThemeInfo.Image.name}");
+        UIManager.Instance.ThemeButton(_cellIndex);
     }
 }

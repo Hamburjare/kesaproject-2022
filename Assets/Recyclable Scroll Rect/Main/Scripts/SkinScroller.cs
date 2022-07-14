@@ -13,9 +13,9 @@ using System.IO;
 //Dummy Data model for demostraion
 public struct SkinInfo
 {
-    public string Name;
-    public string Price;
-    public Sprite Image;
+    public string name;
+    public string price;
+    public Sprite image;
 }
 
 public class SkinScroller : MonoBehaviour, IRecyclableScrollRectDataSource
@@ -32,11 +32,10 @@ public class SkinScroller : MonoBehaviour, IRecyclableScrollRectDataSource
     [SerializeField]
     List<Sprite> _sprites = new List<Sprite>();
 
-    string _skinData;
-
-    public Skins[] skins {get; set;}
+    public Skins[] skins { get; set; }
 
     public static SkinScroller Instance;
+
 
     //Recyclable scroll rect's data source must be assigned in Awake.
     private void Awake()
@@ -51,11 +50,11 @@ public class SkinScroller : MonoBehaviour, IRecyclableScrollRectDataSource
 
         LoadSkinData();
         _dataLength = skins.Length;
-        SaveSkinData();
 
 
         InitData();
         _recyclableScrollRect.DataSource = this;
+
     }
 
     //Initialising _contactList with dummy data 
@@ -67,15 +66,15 @@ public class SkinScroller : MonoBehaviour, IRecyclableScrollRectDataSource
         {
             SkinInfo obj = new SkinInfo();
 
-            skins[i].price = Math.Abs(skins[i].price);
+
             if (skins[i].owned)
             {
-                obj.Price = "Owned";
+                obj.price = "Owned";
             }
-            else obj.Price = string.Format("{0, -15:N0}", skins[i].price);
+            else obj.price = string.Format("{0, -15:N0}", skins[i].price);
 
-            obj.Name = skins[i].name;
-            obj.Image = _sprites[i];
+            obj.name = skins[i].name;
+            obj.image = _sprites[i];
 
             _contactList.Add(obj);
         }
@@ -102,14 +101,22 @@ public class SkinScroller : MonoBehaviour, IRecyclableScrollRectDataSource
         item.ConfigureCell(_contactList[index], index);
     }
 
+
     #endregion
+
+
+    public void ReloadCell()
+    {
+        InitData();
+        _recyclableScrollRect.ReloadData();
+    }
 
 
     [System.Serializable]
 
     public class Skins
     {
-        public long price;
+        public ulong price;
         public string name;
         public bool owned;
     }
@@ -118,19 +125,24 @@ public class SkinScroller : MonoBehaviour, IRecyclableScrollRectDataSource
     {
         Skins[] skinInstance = new Skins[_dataLength];
 
-        for (int i = 0; i < _dataLength; i++)
+        string path = Application.persistentDataPath + "/skins.json";
+        if (File.Exists(path))
         {
-            skinInstance[i] = new Skins();
-            skinInstance[i].name = skins[i].name;
-            skinInstance[i].owned = skins[i].owned;
-            skinInstance[i].price = skins[i].price;
+            for (int i = 0; i < _dataLength; i++)
+            {
+                skinInstance[i] = new Skins();
+                skinInstance[i].name = skins[i].name;
+                skinInstance[i].owned = skins[i].owned;
+                skinInstance[i].price = skins[i].price;
+            }
+
+            //Convert to JSON
+            string json = JsonHelper.ToJson(skinInstance, true);
+            File.WriteAllText(Application.persistentDataPath + "/skins.json", json);
         }
 
 
 
-        //Convert to JSON
-        string json = JsonHelper.ToJson(skinInstance, true);
-        File.WriteAllText(Application.persistentDataPath + "/skins.json", json);
     }
 
     public void LoadSkinData()
@@ -142,8 +154,15 @@ public class SkinScroller : MonoBehaviour, IRecyclableScrollRectDataSource
 
             string json = File.ReadAllText(path);
             skins = JsonHelper.FromJson<Skins>(json);
-
+        }
+        else
+        {
+            // https://jsontostring.com/
+            string json = "{\"Items\":[{\"price\":0,\"name\":\"Zombie\",\"owned\":true},{\"price\":10000,\"name\":\"Pirate Zombie\",\"owned\":false},{\"price\":99999,\"name\":\"Skeleton\",\"owned\":false},{\"price\":999999999999,\"name\":\"Pirate Skeleton\",\"owned\":false}]}";
+            skins = JsonHelper.FromJson<Skins>(json);
+            File.WriteAllText(path, json);
         }
     }
 
 }
+

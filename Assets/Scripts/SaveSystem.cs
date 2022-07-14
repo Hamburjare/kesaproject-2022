@@ -9,22 +9,23 @@ public static class SaveSystem
     public static void SaveScore(GameManager scoreData)
     {
         BinaryFormatter formatter = new BinaryFormatter();
-        
+
         FileStream stream = new FileStream(scoreFilePath, FileMode.Create);
 
-        ScoreData data = new ScoreData(scoreData);
+        PlayerData data = new PlayerData(scoreData);
 
         formatter.Serialize(stream, data);
         stream.Close();
     }
 
-    public static ScoreData LoadScore()
+
+    public static PlayerData LoadScore()
     {
         if (File.Exists(scoreFilePath))
         {
             BinaryFormatter formatter = new BinaryFormatter();
             FileStream stream = new FileStream(scoreFilePath, FileMode.Open);
-            ScoreData data = formatter.Deserialize(stream) as ScoreData;
+            PlayerData data = formatter.Deserialize(stream) as PlayerData;
             stream.Close();
 
             return data;
@@ -37,3 +38,18 @@ public static class SaveSystem
         }
     }
 }
+
+[System.Serializable]
+public class PlayerData
+{
+    public float highScore;
+
+    public PlayerData(GameManager scoreData)
+    {
+        if (scoreData.score > highScore)
+        {
+            highScore = scoreData.score;
+        }
+    }
+}
+

@@ -33,9 +33,9 @@ public class SkinCell : MonoBehaviour, ICell
         _cellIndex = cellIndex;
         _SkinInfo = SkinInfo;
 
-        priceLabel.text = SkinInfo.Price;
-        nameLabel.text = SkinInfo.Name;
-        ImageLabel.sprite = SkinInfo.Image;
+        priceLabel.text = SkinInfo.price;
+        nameLabel.text = SkinInfo.name;
+        ImageLabel.sprite = SkinInfo.image;
     }
 
     private void ButtonListener()

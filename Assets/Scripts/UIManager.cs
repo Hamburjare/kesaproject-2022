@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -14,6 +15,7 @@ using UnityEditor;
 
 public class UIManager : MonoBehaviour
 {
+
     public static UIManager Instance;
 
     [SerializeField]
@@ -37,8 +39,14 @@ public class UIManager : MonoBehaviour
         lastPressed.GetComponent<Animator>().Play("ButtonUp");
     }
 
+    void Update()
+    {
+
+    }
+
     void StartGame()
     {
+        GameManager.Instance.gameStarted = true;
         SceneManager.LoadScene("MainScene");
     }
 
@@ -108,8 +116,50 @@ public class UIManager : MonoBehaviour
     public void SkinButton(int i)
     {
         SkinScroller.Skins[] skins = SkinScroller.Instance.skins;
-        Debug.Log($"Index : {i}, Price : {skins[i].price}, Name : {skins[i].name}, Owned : {skins[i].owned}");
+        // Debug.Log($"Index : {i}, Price : {skins[i].price}, Name : {skins[i].name}, Owned : {skins[i].owned}");
+
+        if (GameManager.Instance.money >= skins[i].price && !skins[i].owned)
+        {
+            GameManager.Instance.SetMoney(skins[i].price);
+            skins[i].owned = true;
+            SkinScroller.Instance.SaveSkinData();
+            SkinScroller.Instance.LoadSkinData();
+            SkinScroller.Instance.ReloadCell();
+            Debug.Log($"Ostit skinin hintaan {skins[i].price}, sinulla on rahaa vielä {GameManager.Instance.money}");
+
+        } 
+        else if(!skins[i].owned)
+            Debug.Log($"Sinulta puuttuu vielä {skins[i].price - GameManager.Instance.money}");
 
     }
+    public void ThemeButton(int i)
+    {
+        ThemeScroller.Themes[] themes = ThemeScroller.Instance.themes;
+        // Debug.Log($"Index : {i}, Price : {skins[i].price}, Name : {skins[i].name}, Owned : {skins[i].owned}");
+
+        if (GameManager.Instance.money >= themes[i].price && !themes[i].owned)
+        {
+            GameManager.Instance.SetMoney(themes[i].price);
+            themes[i].owned = true;
+            ThemeScroller.Instance.SaveThemeData();
+            ThemeScroller.Instance.LoadThemeData();
+            ThemeScroller.Instance.ReloadCell();
+            Debug.Log($"Ostit teeman hintaan {themes[i].price}, sinulla on rahaa vielä {GameManager.Instance.money}");
+
+        } 
+        else if(!themes[i].owned)
+            Debug.Log($"Sinulta puuttuu vielä {themes[i].price - GameManager.Instance.money}");
+
+    }
+
+    public void CloseApplication()
+    {
+#if UNITY_EDITOR
+        EditorApplication.ExitPlaymode();
+#else
+                Application.Quit();
+#endif
+    }
+
 
 }

@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 using PolyAndCode.UI;
+using System.IO;
 
 /// <summary>
 /// Demo controller class for Recyclable Scroll Rect. 
@@ -12,9 +13,9 @@ using PolyAndCode.UI;
 //Dummy Data model for demostraion
 public struct ThemeInfo
 {
-    public string Name;
-    public string Price;
-    public Sprite Image;
+    public string name;
+    public string price;
+    public Sprite image;
 }
 
 public class ThemeScroller : MonoBehaviour, IRecyclableScrollRectDataSource
@@ -24,20 +25,34 @@ public class ThemeScroller : MonoBehaviour, IRecyclableScrollRectDataSource
 
     [SerializeField]
     private int _dataLength;
-    
+
     //Dummy data List
     List<ThemeInfo> _contactList = new List<ThemeInfo>();
 
     [SerializeField]
     List<Sprite> _sprites = new List<Sprite>();
 
+    public Themes[] themes { get; set; }
+
+    public static ThemeScroller Instance;
+
     //Recyclable scroll rect's data source must be assigned in Awake.
     private void Awake()
     {
-        _dataLength = _sprites.Count;
+
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+
+        LoadThemeData();
+        _dataLength = themes.Length;
 
         InitData();
         _recyclableScrollRect.DataSource = this;
+
     }
 
     //Initialising _contactList with dummy data 
@@ -45,21 +60,19 @@ public class ThemeScroller : MonoBehaviour, IRecyclableScrollRectDataSource
     {
         if (_contactList != null) _contactList.Clear();
 
-        string[] skinNames = { "Zombie", "Pirate Zombie", "Skeleton", "Pirate Skeleton","s" };
-        long[] priceTags = { 0, 10000, 99999, 999999999999,1 };
         for (int i = 0; i < _dataLength; i++)
         {
             ThemeInfo obj = new ThemeInfo();
 
-            priceTags[i] = Math.Abs(priceTags[i]);
-            if (priceTags[i] == 0)
-            {
-                obj.Price = "Owned";
-            }
-            else obj.Price = string.Format("{0, -15:N0}", priceTags[i]);
 
-            obj.Name = skinNames[i];
-            obj.Image = _sprites[i];
+            if (themes[i].owned)
+            {
+                obj.price = "Owned";
+            }
+            else obj.price = string.Format("{0, -15:N0}", themes[i].price);
+
+            obj.name = themes[i].name;
+            obj.image = _sprites[i];
 
             _contactList.Add(obj);
         }
@@ -87,4 +100,61 @@ public class ThemeScroller : MonoBehaviour, IRecyclableScrollRectDataSource
     }
 
     #endregion
+
+    public void ReloadCell()
+    {
+        InitData();
+        _recyclableScrollRect.ReloadData();
+    }
+
+    [System.Serializable]
+
+    public class Themes
+    {
+        public ulong price;
+        public string name;
+        public bool owned;
+    }
+
+    public void SaveThemeData()
+    {
+        Themes[] themeInstance = new Themes[_dataLength];
+        string path = Application.persistentDataPath + "/themes.json";
+        if (File.Exists(path))
+        {
+            for (int i = 0; i < _dataLength; i++)
+            {
+                themeInstance[i] = new Themes();
+                themeInstance[i].name = themes[i].name;
+                themeInstance[i].owned = themes[i].owned;
+                themeInstance[i].price = themes[i].price;
+            }
+
+            //Convert to JSON
+            string json = JsonHelper.ToJson(themeInstance, true);
+            File.WriteAllText(path, json); 
+        }
+
+
+    }
+
+    public void LoadThemeData()
+    {
+
+        string path = Application.persistentDataPath + "/themes.json";
+        if (File.Exists(path))
+        {
+
+            string json = File.ReadAllText(path);
+            themes = JsonHelper.FromJson<Themes>(json);
+        }
+        else
+        {
+            // https://jsontostring.com/
+            string json = "{\"Items\":[{\"price\":0,\"name\":\"Green\",\"owned\":true},{\"price\":10000,\"name\":\"Beige\",\"owned\":false},{\"price\":99999,\"name\":\"Black\",\"owned\":false},{\"price\":999999999999,\"name\":\"NeonPurple\",\"owned\":false},{\"price\":9999999999999,\"name\":\"Christmas\",\"owned\":false}]}";
+            themes = JsonHelper.FromJson<Themes>(json);
+            File.WriteAllText(path, json);
+        }
+
+    }
 }
