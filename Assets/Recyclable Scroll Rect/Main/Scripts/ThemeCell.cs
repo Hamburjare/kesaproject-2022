@@ -14,6 +14,10 @@ public class ThemeCell : MonoBehaviour, ICell
     public TextMeshProUGUI nameLabel;
     public Image ImageLabel;
 
+    public GameObject lockedPanel;
+
+    public TextMeshProUGUI ownedLabel;
+
     public Button cellButton;
 
     //Model
@@ -27,7 +31,7 @@ public class ThemeCell : MonoBehaviour, ICell
     }
 
     //This is called from the SetCell method in DataSource
-    public void ConfigureCell(ThemeInfo ThemeInfo,int cellIndex)
+    public void ConfigureCell(ThemeInfo ThemeInfo, int cellIndex)
     {
         _cellIndex = cellIndex;
         _ThemeInfo = ThemeInfo;
@@ -35,11 +39,14 @@ public class ThemeCell : MonoBehaviour, ICell
         priceLabel.text = ThemeInfo.price;
         nameLabel.text = ThemeInfo.name;
         ImageLabel.sprite = ThemeInfo.image;
+        lockedPanel.SetActive(ThemeInfo.locked);
+        ownedLabel.text = ThemeInfo.owned;
     }
 
-    
+
     private void ButtonListener()
     {
-        UIManager.Instance.ThemeButton(_cellIndex);
+        UIManager.Instance.themeIndex = _cellIndex;
+        UIManager.Instance.ThemeButton();
     }
 }

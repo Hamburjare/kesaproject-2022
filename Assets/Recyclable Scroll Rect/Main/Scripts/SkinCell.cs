@@ -14,6 +14,10 @@ public class SkinCell : MonoBehaviour, ICell
     public TextMeshProUGUI nameLabel;
     public Image ImageLabel;
 
+    public GameObject lockedPanel;
+
+    public TextMeshProUGUI ownedLabel;
+
     public Button cellButton;
 
     //Model
@@ -36,11 +40,14 @@ public class SkinCell : MonoBehaviour, ICell
         priceLabel.text = SkinInfo.price;
         nameLabel.text = SkinInfo.name;
         ImageLabel.sprite = SkinInfo.image;
+        lockedPanel.SetActive(SkinInfo.locked);
+        ownedLabel.text = SkinInfo.owned;
     }
 
     private void ButtonListener()
     {
-        UIManager.Instance.SkinButton(_cellIndex);
+        UIManager.Instance.skinIndex = _cellIndex;
+        UIManager.Instance.SkinButton();
     }
 
 }

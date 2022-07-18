@@ -16,6 +16,11 @@ public struct SkinInfo
     public string name;
     public string price;
     public Sprite image;
+
+    public bool locked;
+
+    public string owned;
+
 }
 
 public class SkinScroller : MonoBehaviour, IRecyclableScrollRectDataSource
@@ -66,10 +71,16 @@ public class SkinScroller : MonoBehaviour, IRecyclableScrollRectDataSource
         {
             SkinInfo obj = new SkinInfo();
 
-
+            obj.locked = true;
+            obj.owned = "";
             if (skins[i].owned)
             {
-                obj.price = "Owned";
+                obj.owned = "Owned";
+                if (skins[i].selected)
+                {
+                    obj.owned = "Selected";
+                }
+                obj.locked = false;
             }
             else obj.price = string.Format("{0, -15:N0}", skins[i].price);
 
@@ -119,6 +130,7 @@ public class SkinScroller : MonoBehaviour, IRecyclableScrollRectDataSource
         public ulong price;
         public string name;
         public bool owned;
+        public bool selected;
     }
 
     public void SaveSkinData()
@@ -134,6 +146,7 @@ public class SkinScroller : MonoBehaviour, IRecyclableScrollRectDataSource
                 skinInstance[i].name = skins[i].name;
                 skinInstance[i].owned = skins[i].owned;
                 skinInstance[i].price = skins[i].price;
+                skinInstance[i].selected = skins[i].selected;
             }
 
             //Convert to JSON
@@ -158,7 +171,7 @@ public class SkinScroller : MonoBehaviour, IRecyclableScrollRectDataSource
         else
         {
             // https://jsontostring.com/
-            string json = "{\"Items\":[{\"price\":0,\"name\":\"Zombie\",\"owned\":true},{\"price\":10000,\"name\":\"Pirate Zombie\",\"owned\":false},{\"price\":99999,\"name\":\"Skeleton\",\"owned\":false},{\"price\":999999999999,\"name\":\"Pirate Skeleton\",\"owned\":false}]}";
+            string json = "{\"Items\":[{\"price\":0,\"name\":\"Zombie\",\"owned\":true,\"selected\":true},{\"price\":10000,\"name\":\"PirateZombie\",\"owned\":false,\"selected\":false},{\"price\":99999,\"name\":\"Skeleton\",\"owned\":false,\"selected\":false},{\"price\":999999999999,\"name\":\"PirateSkeleton\",\"owned\":false,\"selected\":false}]}";
             skins = JsonHelper.FromJson<Skins>(json);
             File.WriteAllText(path, json);
         }

@@ -16,6 +16,10 @@ public struct ThemeInfo
     public string name;
     public string price;
     public Sprite image;
+    public bool locked;
+
+    public string owned;
+
 }
 
 public class ThemeScroller : MonoBehaviour, IRecyclableScrollRectDataSource
@@ -64,10 +68,16 @@ public class ThemeScroller : MonoBehaviour, IRecyclableScrollRectDataSource
         {
             ThemeInfo obj = new ThemeInfo();
 
-
+            obj.locked = true;
+            obj.owned = "";
             if (themes[i].owned)
             {
-                obj.price = "Owned";
+                obj.owned = "Owned";
+                if (themes[i].selected)
+                {
+                    obj.owned = "Selected";
+                }
+                obj.locked = false;
             }
             else obj.price = string.Format("{0, -15:N0}", themes[i].price);
 
@@ -114,6 +124,7 @@ public class ThemeScroller : MonoBehaviour, IRecyclableScrollRectDataSource
         public ulong price;
         public string name;
         public bool owned;
+        public bool selected;
     }
 
     public void SaveThemeData()
@@ -128,11 +139,13 @@ public class ThemeScroller : MonoBehaviour, IRecyclableScrollRectDataSource
                 themeInstance[i].name = themes[i].name;
                 themeInstance[i].owned = themes[i].owned;
                 themeInstance[i].price = themes[i].price;
+                themeInstance[i].selected = themes[i].selected;
+
             }
 
             //Convert to JSON
             string json = JsonHelper.ToJson(themeInstance, true);
-            File.WriteAllText(path, json); 
+            File.WriteAllText(path, json);
         }
 
 
@@ -151,7 +164,7 @@ public class ThemeScroller : MonoBehaviour, IRecyclableScrollRectDataSource
         else
         {
             // https://jsontostring.com/
-            string json = "{\"Items\":[{\"price\":0,\"name\":\"Green\",\"owned\":true},{\"price\":10000,\"name\":\"Beige\",\"owned\":false},{\"price\":99999,\"name\":\"Black\",\"owned\":false},{\"price\":999999999999,\"name\":\"NeonPurple\",\"owned\":false},{\"price\":9999999999999,\"name\":\"Christmas\",\"owned\":false}]}";
+            string json = "{\"Items\":[{\"price\":0,\"name\":\"Green\",\"owned\":true,\"selected\":true},{\"price\":10000,\"name\":\"Beige\",\"owned\":false,\"selected\":false},{\"price\":99999,\"name\":\"Black\",\"owned\":false,\"selected\":false},{\"price\":999999999999,\"name\":\"NeonPurple\",\"owned\":false,\"selected\":false},{\"price\":9999999999999,\"name\":\"Christmas\",\"owned\":false,\"selected\":false}]}";
             themes = JsonHelper.FromJson<Themes>(json);
             File.WriteAllText(path, json);
         }

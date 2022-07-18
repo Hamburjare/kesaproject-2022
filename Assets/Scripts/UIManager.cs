@@ -28,6 +28,19 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     GameObject themeList;
 
+    [SerializeField]
+    TextMeshProUGUI skinPriceButtonText;
+    [SerializeField]
+    TextMeshProUGUI themePriceButtonText;
+
+    public GameObject skinBuyConfirmObject;
+
+    public GameObject themeBuyConfirmObject;
+
+    public int skinIndex;
+
+    public int themeIndex;
+
     void Start()
     {
         if (Instance != null)
@@ -37,6 +50,7 @@ public class UIManager : MonoBehaviour
         }
         Instance = this;
         lastPressed.GetComponent<Animator>().Play("ButtonUp");
+
     }
 
     void Update()
@@ -76,7 +90,6 @@ public class UIManager : MonoBehaviour
                 skinList.SetActive(true);
                 themeList.SetActive(false);
                 CheckLastPress(justPressed);
-                Debug.Log($"{index} {justPressed.transform.position}");
                 break;
 
             // Theme Button
@@ -84,7 +97,6 @@ public class UIManager : MonoBehaviour
                 skinList.SetActive(false);
                 themeList.SetActive(true);
                 CheckLastPress(justPressed);
-                Debug.Log($"{index} {justPressed.transform.position}");
                 break;
 
             // Shop Button
@@ -112,44 +124,101 @@ public class UIManager : MonoBehaviour
         }
         lastPressed = justPressed;
     }
+    
 
-    public void SkinButton(int i)
+    public void SkinButton()
     {
         SkinScroller.Skins[] skins = SkinScroller.Instance.skins;
-        // Debug.Log($"Index : {i}, Price : {skins[i].price}, Name : {skins[i].name}, Owned : {skins[i].owned}");
 
-        if (GameManager.Instance.money >= skins[i].price && !skins[i].owned)
+        int i = skinIndex;
+        
+        if (!skins[i].owned)
         {
-            GameManager.Instance.SetMoney(skins[i].price);
-            skins[i].owned = true;
-            SkinScroller.Instance.SaveSkinData();
-            SkinScroller.Instance.LoadSkinData();
-            SkinScroller.Instance.ReloadCell();
-            Debug.Log($"Ostit skinin hintaan {skins[i].price}, sinulla on rahaa vielä {GameManager.Instance.money}");
-
-        } 
-        else if(!skins[i].owned)
-            Debug.Log($"Sinulta puuttuu vielä {skins[i].price - GameManager.Instance.money}");
+            skinPriceButtonText.text = string.Format("{0, -15:N0}", skins[i].price);
+            skinBuyConfirmObject.SetActive(true);
+            return;
+        }
+    
+        SelectSkin(skins, i);
 
     }
-    public void ThemeButton(int i)
+    public void ThemeButton()
     {
         ThemeScroller.Themes[] themes = ThemeScroller.Instance.themes;
-        // Debug.Log($"Index : {i}, Price : {skins[i].price}, Name : {skins[i].name}, Owned : {skins[i].owned}");
 
+        int i = themeIndex;
+
+        if (!themes[i].owned)
+        {
+            themePriceButtonText.text = string.Format("{0, -15:N0}", themes[i].price);
+            themeBuyConfirmObject.SetActive(true);
+            return;
+        }
+
+        SelectTheme(themes, i);
+    }
+
+    void SelectSkin(SkinScroller.Skins[] skins, int i)
+    {
+        for (int j = 0; j < skins.Length; j++)
+        {
+            skins[j].selected = false;
+        }
+
+        skins[i].selected = true;
+        SkinScroller.Instance.ReloadCell();
+
+    }
+    void SelectTheme(ThemeScroller.Themes[] themes, int i)
+    {
+        for (int j = 0; j < themes.Length; j++)
+        {
+            themes[j].selected = false;
+        }
+
+        themes[i].selected = true;
+        ThemeScroller.Instance.ReloadCell();
+
+    }
+
+    public void BuyTheme()
+    {
+        themeBuyConfirmObject.SetActive(false);
+        int i = themeIndex;
+        ThemeScroller.Themes[] themes = ThemeScroller.Instance.themes;
         if (GameManager.Instance.money >= themes[i].price && !themes[i].owned)
         {
             GameManager.Instance.SetMoney(themes[i].price);
             themes[i].owned = true;
             ThemeScroller.Instance.SaveThemeData();
-            ThemeScroller.Instance.LoadThemeData();
             ThemeScroller.Instance.ReloadCell();
             Debug.Log($"Ostit teeman hintaan {themes[i].price}, sinulla on rahaa vielä {GameManager.Instance.money}");
 
-        } 
-        else if(!themes[i].owned)
+        }
+        else if (!themes[i].owned)
             Debug.Log($"Sinulta puuttuu vielä {themes[i].price - GameManager.Instance.money}");
 
+        SelectTheme(themes, i);
+    }
+
+    public void BuySkin()
+    {
+        skinBuyConfirmObject.SetActive(false);
+        int i = skinIndex;
+        SkinScroller.Skins[] skins = SkinScroller.Instance.skins;
+        if (GameManager.Instance.money >= skins[i].price && !skins[i].owned)
+        {
+            GameManager.Instance.SetMoney(skins[i].price);
+            skins[i].owned = true;
+            SkinScroller.Instance.SaveSkinData();
+            SkinScroller.Instance.ReloadCell();
+            Debug.Log($"Ostit skinin hintaan {skins[i].price}, sinulla on rahaa vielä {GameManager.Instance.money}");
+
+        }
+        else if (!skins[i].owned)
+            Debug.Log($"Sinulta puuttuu vielä {skins[i].price - GameManager.Instance.money}");
+
+        SelectSkin(skins, i);
     }
 
     public void CloseApplication()
