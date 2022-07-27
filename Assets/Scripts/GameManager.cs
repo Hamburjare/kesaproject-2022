@@ -67,12 +67,44 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public void SetMoney(ulong p)
+    public void SetMoney(char m, ulong p)
     {
-        if (money >= p)
+        if (m == '-')
         {
-            money -= p;
+            if (money >= p)
+            {
+                money -= p;
+            }
         }
+        else if (m == '+')
+        {
+            money += p;
+        }
+        else
+        {
+            Debug.LogError($"{m} is not a valid");
+        }
+
+        SavePlayerData(money, score, diamonds);
+    }
+    public void SetDiamonds(char m, ulong p)
+    {
+        if (m == '-')
+        {
+            if (diamonds >= p)
+            {
+                diamonds -= p;
+            }
+        }
+        else if (m == '+')
+        {
+            diamonds += p;
+        }
+        else
+        {
+            Debug.LogError($"{m} is not a valid");
+        }
+
         SavePlayerData(money, score, diamonds);
     }
 
