@@ -588,7 +588,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!60 &503380393
 PolygonCollider2D:
@@ -902,7 +902,7 @@ Transform:
   m_Children:
   - {fileID: 939322945}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1028906976
 MonoBehaviour:
@@ -933,9 +933,10 @@ GameObject:
   - component: {fileID: 1223660988}
   - component: {fileID: 1223660990}
   - component: {fileID: 1223660991}
+  - component: {fileID: 1223660992}
   m_Layer: 0
   m_Name: LevelDeletor
-  m_TagString: Untagged
+  m_TagString: Deletor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1014,6 +1015,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 7
+--- !u!114 &1223660992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1223660987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b46ef5f7f881047879ec422a0566e335, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1485944578
 GameObject:
   m_ObjectHideFlags: 0
@@ -1396,6 +1409,23 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1657364339 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5382251931310793141, guid: 2837f681ae271c445a03f90f35d65382, type: 3}
+  m_PrefabInstance: {fileID: 5382251930923678526}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1657364345
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1657364339}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e23c7cca56445c84dbcce6c5d05f1f95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1781177796
 GameObject:
   m_ObjectHideFlags: 0
@@ -1939,7 +1969,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5382251931310793139, guid: 2837f681ae271c445a03f90f35d65382, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5382251931310793139, guid: 2837f681ae271c445a03f90f35d65382, type: 3}
       propertyPath: m_LocalPosition.x
