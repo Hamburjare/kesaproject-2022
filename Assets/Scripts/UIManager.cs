@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System;
 
 
 #if UNITY_EDITOR
@@ -30,6 +31,33 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     GameObject _shopPanel;
+
+    [SerializeField]
+    GameObject _abilitiesPanel;
+
+    [SerializeField]
+    TextMeshProUGUI _infectionValueText;
+
+    [SerializeField]
+    TextMeshProUGUI _infectionButtonText;
+    [SerializeField]
+    GameObject _infectionButtonMoneyIcon;
+
+    [SerializeField]
+    TextMeshProUGUI _speedValueText;
+
+    [SerializeField]
+    TextMeshProUGUI _speedButtonText;
+    [SerializeField]
+    GameObject _speedButtonMoneyIcon;
+
+    [SerializeField]
+    TextMeshProUGUI _jumpValueText;
+
+    [SerializeField]
+    TextMeshProUGUI _jumpButtonText;
+    [SerializeField]
+    GameObject _jumpButtonMoneyIcon;
 
     [SerializeField]
     GameObject _buttons;
@@ -80,6 +108,11 @@ public class UIManager : MonoBehaviour
         _lastPressed.GetComponent<Animator>().Play("ButtonUp");
         _moneyText.text = string.Format("{0, -15:N0}", GameManager.Instance.money);
         _diamondText.text = string.Format("{0, -15:N0}", GameManager.Instance.diamonds);
+        _infectionValueText.text = $"{GameManager.Instance.infectionSpeed} x";
+        AbilityPrice(GameManager.Instance.infectionSpeed, "infection");
+        AbilityPrice(GameManager.Instance.jumpForce, "jump");
+        AbilityPrice(GameManager.Instance.playerSpeed, "speed");
+
 
     }
 
@@ -87,7 +120,6 @@ public class UIManager : MonoBehaviour
     {
         _moneyText.text = string.Format("{0, -15:N0}", GameManager.Instance.money);
         _diamondText.text = string.Format("{0, -15:N0}", GameManager.Instance.diamonds);
-
     }
 
     void StartGame()
@@ -109,8 +141,13 @@ public class UIManager : MonoBehaviour
                 StartGame();
                 break;
 
-            // Perks Button
+            // Abilities Button
             case 1:
+                _abilitiesPanel.SetActive(true);
+                _skinList.SetActive(false);
+                _themeList.SetActive(false);
+                _shopPanel.SetActive(false);
+
                 CheckLastPress(justPressed);
 
                 break;
@@ -120,24 +157,27 @@ public class UIManager : MonoBehaviour
                 _skinList.SetActive(true);
                 _themeList.SetActive(false);
                 _shopPanel.SetActive(false);
+                _abilitiesPanel.SetActive(false);
 
                 CheckLastPress(justPressed);
                 break;
 
             // Theme Button
             case 3:
-                _skinList.SetActive(false);
                 _themeList.SetActive(true);
+                _skinList.SetActive(false);
                 _shopPanel.SetActive(false);
+                _abilitiesPanel.SetActive(false);
 
                 CheckLastPress(justPressed);
                 break;
 
             // Shop Button
             case 4:
+                _shopPanel.SetActive(true);
                 _skinList.SetActive(false);
                 _themeList.SetActive(false);
-                _shopPanel.SetActive(true);
+                _abilitiesPanel.SetActive(false);
 
                 CheckLastPress(justPressed);
                 break;
@@ -215,8 +255,14 @@ public class UIManager : MonoBehaviour
 
         skins[i].selected = true;
         SkinScroller.Instance.ReloadCell();
+        SkinScroller.Instance.SaveSkinData();
+        AbilityPrice(GameManager.Instance.infectionSpeed, "infection");
+        AbilityPrice(GameManager.Instance.jumpForce, "jump");
+        AbilityPrice(GameManager.Instance.playerSpeed, "speed");
+
 
     }
+
     void SelectTheme(ThemeScroller.Themes[] themes, int i)
     {
         for (int j = 0; j < themes.Length; j++)
@@ -226,7 +272,7 @@ public class UIManager : MonoBehaviour
 
         themes[i].selected = true;
         ThemeScroller.Instance.ReloadCell();
-
+        ThemeScroller.Instance.SaveThemeData();
     }
 
     public void BuyTheme()
@@ -367,6 +413,107 @@ public class UIManager : MonoBehaviour
     {
         _diamondsBuyConfirmObject.SetActive(false);
         GameManager.Instance.SetDiamonds('+', _amount);
+    }
+
+    void AbilityPrice(double a, string ability)
+    {
+        switch (ability)
+        {
+            case "infection":
+                _infectionValueText.text = $"{a} x";
+
+                if (a == 2.0f)
+                {
+                    _infectionButtonText.text = "MAX";
+                    _infectionButtonMoneyIcon.SetActive(false);
+                    break;
+                }
+                _infectionButtonMoneyIcon.SetActive(true);
+                _infectionButtonText.text = string.Format("{0, -15:N0}", a * 135000); ;
+
+                break;
+            case "speed":
+                _speedValueText.text = $"{a} x";
+
+                if (a == 2.0f)
+                {
+                    _speedButtonText.text = "MAX";
+                    _speedButtonMoneyIcon.SetActive(false);
+                    break;
+                }
+                _speedButtonMoneyIcon.SetActive(true);
+                _speedButtonText.text = string.Format("{0, -15:N0}", a * 145000); ;
+
+                break;
+            case "jump":
+                _jumpValueText.text = $"{a} x";
+
+                if (a == 2.0f)
+                {
+                    _jumpButtonText.text = "MAX";
+                    _jumpButtonMoneyIcon.SetActive(false);
+                    break;
+                }
+                _jumpButtonMoneyIcon.SetActive(true);
+                _jumpButtonText.text = string.Format("{0, -15:N0}", a * 175000); ;
+
+                break;
+        }
+
+    }
+
+    public void InfectionSpeed()
+    {
+        SkinScroller.Skins[] skins = SkinScroller.Instance.skins;
+        if (GameManager.Instance.money >= GameManager.Instance.infectionSpeed * 145000)
+        {
+            if (GameManager.Instance.infectionSpeed < 2.0)
+            {
+                ulong cost = System.Convert.ToUInt64(GameManager.Instance.infectionSpeed * 145000);
+                GameManager.Instance.SetMoney('-', cost);
+                GameManager.Instance.infectionSpeed += 0.2f;
+                GameManager.Instance.infectionSpeed = Math.Round(GameManager.Instance.infectionSpeed, 2);
+
+                skins[GameManager.Instance.selectedSkinIndex].infectionSpeed = GameManager.Instance.infectionSpeed;
+                SkinScroller.Instance.SaveSkinData();
+            }
+        }
+        AbilityPrice(GameManager.Instance.infectionSpeed, "infection");
+    }
+
+    public void PlayerSpeed()
+    {
+        SkinScroller.Skins[] skins = SkinScroller.Instance.skins;
+        if (GameManager.Instance.money >= GameManager.Instance.playerSpeed * 135000)
+        {
+            if (GameManager.Instance.playerSpeed < 2.0)
+            {
+                ulong cost = System.Convert.ToUInt64(GameManager.Instance.playerSpeed * 135000);
+                GameManager.Instance.SetMoney('-', cost);
+                GameManager.Instance.playerSpeed += 0.1f;
+                GameManager.Instance.playerSpeed = Math.Round(GameManager.Instance.playerSpeed, 2);
+                skins[GameManager.Instance.selectedSkinIndex].playerSpeed = GameManager.Instance.playerSpeed;
+                SkinScroller.Instance.SaveSkinData();
+            }
+        }
+        AbilityPrice(GameManager.Instance.playerSpeed, "speed");
+    }
+    public void JumpForce()
+    {
+        SkinScroller.Skins[] skins = SkinScroller.Instance.skins;
+        if (GameManager.Instance.money >= GameManager.Instance.jumpForce * 175000)
+        {
+            if (GameManager.Instance.jumpForce < 2.0)
+            {
+                ulong cost = System.Convert.ToUInt64(GameManager.Instance.jumpForce * 175000);
+                GameManager.Instance.SetMoney('-', cost);
+                GameManager.Instance.jumpForce += 0.05f;
+                GameManager.Instance.jumpForce = Math.Round(GameManager.Instance.jumpForce, 2);
+                skins[GameManager.Instance.selectedSkinIndex].jumpForce = GameManager.Instance.jumpForce;
+                SkinScroller.Instance.SaveSkinData();
+            }
+        }
+        AbilityPrice(GameManager.Instance.jumpForce, "jump");
     }
 
     public void CloseApplication()

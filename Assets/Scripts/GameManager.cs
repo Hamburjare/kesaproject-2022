@@ -24,6 +24,69 @@ public class GameManager : MonoBehaviour
 
     public bool gameStarted;
 
+    [SerializeField]
+    double _infectionSpeed;
+
+    public double infectionSpeed
+    {
+        get
+        {
+            return _infectionSpeed;
+        }
+
+        set
+        {
+            if (value >= 1.0)
+            {
+                _infectionSpeed = value;
+            }
+            else _infectionSpeed = 1.0f;
+        }
+    }
+
+    [SerializeField]
+    double _playerSpeed;
+
+    public double playerSpeed
+    {
+        get
+        {
+            return _playerSpeed;
+        }
+
+        set
+        {
+            if (value >= 1.0)
+            {
+                _playerSpeed = value;
+            }
+            else _infectionSpeed = 1.0f;
+        }
+    }
+
+    [SerializeField]
+    double _jumpForce;
+
+    public double jumpForce
+    {
+        get
+        {
+            return _jumpForce;
+        }
+
+        set
+        {
+            if (value >= 1.0)
+            {
+                _jumpForce = value;
+            }
+            else _infectionSpeed = 1.0f;
+        }
+    }
+
+    public int selectedSkinIndex;
+
+
     void Awake()
     {
         if (Instance != null)

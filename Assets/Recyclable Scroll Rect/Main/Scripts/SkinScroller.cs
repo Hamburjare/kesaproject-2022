@@ -29,6 +29,9 @@ public class SkinScroller : MonoBehaviour, IRecyclableScrollRectDataSource
     RecyclableScrollRect _recyclableScrollRect;
 
     [SerializeField]
+    GameManager _gameManager;
+
+    [SerializeField]
     private int _dataLength;
 
     //Dummy data List
@@ -79,6 +82,10 @@ public class SkinScroller : MonoBehaviour, IRecyclableScrollRectDataSource
                 if (skins[i].selected)
                 {
                     obj.owned = "Selected";
+                    _gameManager.selectedSkinIndex = i;
+                    _gameManager.infectionSpeed = skins[i].infectionSpeed;
+                    _gameManager.playerSpeed = skins[i].playerSpeed;
+                    _gameManager.jumpForce = skins[i].jumpForce;    
                 }
                 obj.locked = false;
             }
@@ -90,6 +97,8 @@ public class SkinScroller : MonoBehaviour, IRecyclableScrollRectDataSource
             _contactList.Add(obj);
         }
     }
+
+
 
     #region DATA-SOURCE
 
@@ -131,6 +140,9 @@ public class SkinScroller : MonoBehaviour, IRecyclableScrollRectDataSource
         public string name;
         public bool owned;
         public bool selected;
+        public double infectionSpeed;
+        public double playerSpeed;
+        public double jumpForce;
     }
 
     public void SaveSkinData()
@@ -147,6 +159,9 @@ public class SkinScroller : MonoBehaviour, IRecyclableScrollRectDataSource
                 skinInstance[i].owned = skins[i].owned;
                 skinInstance[i].price = skins[i].price;
                 skinInstance[i].selected = skins[i].selected;
+                skinInstance[i].infectionSpeed = skins[i].infectionSpeed;
+                skinInstance[i].playerSpeed = skins[i].playerSpeed;
+                skinInstance[i].jumpForce = skins[i].jumpForce;
             }
 
             //Convert to JSON
