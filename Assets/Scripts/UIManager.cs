@@ -465,55 +465,51 @@ public class UIManager : MonoBehaviour
     public void InfectionSpeed()
     {
         SkinScroller.Skins[] skins = SkinScroller.Instance.skins;
-        if (GameManager.Instance.money >= GameManager.Instance.infectionSpeed * 145000)
+        if (GameManager.Instance.money >= GameManager.Instance.infectionSpeed * 145000 && GameManager.Instance.infectionSpeed < 2.0)
         {
-            if (GameManager.Instance.infectionSpeed < 2.0)
-            {
-                ulong cost = System.Convert.ToUInt64(GameManager.Instance.infectionSpeed * 145000);
-                GameManager.Instance.SetMoney('-', cost);
-                GameManager.Instance.infectionSpeed += 0.2f;
-                GameManager.Instance.infectionSpeed = Math.Round(GameManager.Instance.infectionSpeed, 2);
+            ulong cost = System.Convert.ToUInt64(GameManager.Instance.infectionSpeed * 145000);
+            GameManager.Instance.SetMoney('-', cost);
+            GameManager.Instance.infectionSpeed += 0.2f;
+            GameManager.Instance.infectionSpeed = Math.Round(GameManager.Instance.infectionSpeed, 2);
 
-                skins[GameManager.Instance.selectedSkinIndex].infectionSpeed = GameManager.Instance.infectionSpeed;
-                SkinScroller.Instance.SaveSkinData();
-            }
+            skins[GameManager.Instance.selectedSkinIndex].infectionSpeed = GameManager.Instance.infectionSpeed;
+            SkinScroller.Instance.SaveSkinData();
+            AbilityPrice(GameManager.Instance.infectionSpeed, "infection");
         }
-        AbilityPrice(GameManager.Instance.infectionSpeed, "infection");
+
     }
 
     public void PlayerSpeed()
     {
         SkinScroller.Skins[] skins = SkinScroller.Instance.skins;
-        if (GameManager.Instance.money >= GameManager.Instance.playerSpeed * 135000)
+        if (GameManager.Instance.money >= GameManager.Instance.playerSpeed * 135000 && GameManager.Instance.playerSpeed < 2.0)
         {
-            if (GameManager.Instance.playerSpeed < 2.0)
-            {
-                ulong cost = System.Convert.ToUInt64(GameManager.Instance.playerSpeed * 135000);
-                GameManager.Instance.SetMoney('-', cost);
-                GameManager.Instance.playerSpeed += 0.1f;
-                GameManager.Instance.playerSpeed = Math.Round(GameManager.Instance.playerSpeed, 2);
-                skins[GameManager.Instance.selectedSkinIndex].playerSpeed = GameManager.Instance.playerSpeed;
-                SkinScroller.Instance.SaveSkinData();
-            }
+            /* A code snippet from a game I am making. It is a function that is called when the player
+            buys a speed upgrade. */
+            ulong cost = System.Convert.ToUInt64(GameManager.Instance.playerSpeed * 135000);
+            GameManager.Instance.SetMoney('-', cost);
+            GameManager.Instance.playerSpeed += 0.1f;
+            GameManager.Instance.playerSpeed = Math.Round(GameManager.Instance.playerSpeed, 2);
+            skins[GameManager.Instance.selectedSkinIndex].playerSpeed = GameManager.Instance.playerSpeed;
+            SkinScroller.Instance.SaveSkinData();
+            AbilityPrice(GameManager.Instance.playerSpeed, "speed");
         }
-        AbilityPrice(GameManager.Instance.playerSpeed, "speed");
     }
     public void JumpForce()
     {
         SkinScroller.Skins[] skins = SkinScroller.Instance.skins;
-        if (GameManager.Instance.money >= GameManager.Instance.jumpForce * 175000)
+        if (GameManager.Instance.money >= GameManager.Instance.jumpForce * 175000 && GameManager.Instance.jumpForce < 2.0)
         {
-            if (GameManager.Instance.jumpForce < 2.0)
-            {
-                ulong cost = System.Convert.ToUInt64(GameManager.Instance.jumpForce * 175000);
-                GameManager.Instance.SetMoney('-', cost);
-                GameManager.Instance.jumpForce += 0.05f;
-                GameManager.Instance.jumpForce = Math.Round(GameManager.Instance.jumpForce, 2);
-                skins[GameManager.Instance.selectedSkinIndex].jumpForce = GameManager.Instance.jumpForce;
-                SkinScroller.Instance.SaveSkinData();
-            }
+            /* The above code is a C# code snippet that is used to increase the jump force of the
+            player. */
+            ulong cost = System.Convert.ToUInt64(GameManager.Instance.jumpForce * 175000);
+            GameManager.Instance.SetMoney('-', cost);
+            GameManager.Instance.jumpForce += 0.05f;
+            GameManager.Instance.jumpForce = Math.Round(GameManager.Instance.jumpForce, 2);
+            skins[GameManager.Instance.selectedSkinIndex].jumpForce = GameManager.Instance.jumpForce;
+            SkinScroller.Instance.SaveSkinData();
+            AbilityPrice(GameManager.Instance.jumpForce, "jump");
         }
-        AbilityPrice(GameManager.Instance.jumpForce, "jump");
     }
 
     public void CloseApplication()
