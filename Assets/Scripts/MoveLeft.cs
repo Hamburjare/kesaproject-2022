@@ -1,13 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class MoveLeft : MonoBehaviour
 {
 
-    // Update is called once per frame
+    float speed;
+
     void FixedUpdate()
     {
-        transform.Translate(Vector3.left * Time.deltaTime * PlayerController.Instance.moveSpeed);
+        if (Input.GetKey(KeyCode.D))
+        {
+            speed = Time.deltaTime * PlayerController.Instance.moveSpeed * Convert.ToSingle(GameManager.Instance.playerSpeed);
+            transform.Translate(Vector3.left * speed);
+
+        }
     }
+    void LateUpdate()
+    {
+        if (Input.GetKey(KeyCode.D))
+        {
+            GameManager.Instance.Score();
+
+        }
+    }
+
 }

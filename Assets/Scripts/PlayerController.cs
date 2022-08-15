@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
@@ -8,12 +10,10 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D rb2d;
 
-    public float moveSpeed = 10f;
+    public float moveSpeed;
 
-    public float jumpForce = 20f;
+    public float jumpForce;
 
-    public KeyCode left;
-    public KeyCode right;
     public KeyCode jump;
 
     public Transform groundCheckPoint;
@@ -21,7 +21,14 @@ public class PlayerController : MonoBehaviour
     public LayerMask whatIsGround;
     private bool isGround;
 
-    // public bool automaticRunning = true; //PROTOTYPING ONLY
+    public TextMeshProUGUI scoreText;
+
+    [SerializeField]
+    TextMeshProUGUI _moneyText;
+
+    [SerializeField]
+    TextMeshProUGUI _diamondText;
+
 
     void Awake()
     {
@@ -31,46 +38,29 @@ public class PlayerController : MonoBehaviour
             return;
         }
         Instance = this;
+        rb2d = GetComponent<Rigidbody2D>();
 
     }
 
-    // Start is called before the first frame update
     void Start()
     {
-        rb2d = GetComponent<Rigidbody2D>();
+        _moneyText.text = string.Format("{0, -15:N0}", GameManager.Instance.money);
+        _diamondText.text = string.Format("{0, -15:N0}", GameManager.Instance.diamonds);
     }
 
     void Update()
     {
         isGround = Physics2D.OverlapCircle(groundCheckPoint.position, groundCheckRadius, whatIsGround);
+        _moneyText.text = string.Format("{0, -15:N0}", GameManager.Instance.money);
+        _diamondText.text = string.Format("{0, -15:N0}", GameManager.Instance.diamonds);
     }
 
     void FixedUpdate()
     {
-        // if (!automaticRunning)
-        // {
-        //     if (Input.GetKey(left))
-        //     {
-        //         rb2d.velocity = new Vector2(-moveSpeed, rb2d.velocity.y);
-        //     }
-        //     else if (Input.GetKey(right))
-        //     {
-        //         rb2d.velocity = new Vector2(moveSpeed, rb2d.velocity.y);
-        //     }
-        //     else
-        //     {
-        //         rb2d.velocity = new Vector2(0, rb2d.velocity.y);
-        //     }
-        // }
-        // else
-        // {
-        //     rb2d.velocity = new Vector2(moveSpeed, rb2d.velocity.y);
-        // }
-
 
         if (Input.GetKey(jump) && isGround)
         {
-            rb2d.velocity = new Vector2(rb2d.velocity.x, jumpForce);
+            rb2d.velocity = new Vector2(rb2d.velocity.x, jumpForce * Convert.ToSingle(GameManager.Instance.jumpForce));
         }
 
         /* Making sure that the player does not go above the y position of 20. */
@@ -78,5 +68,8 @@ public class PlayerController : MonoBehaviour
         {
             transform.position = new Vector3(transform.position.x, 20, transform.position.z);
         }
+
+
     }
+
 }

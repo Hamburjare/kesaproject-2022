@@ -106,12 +106,19 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (gameStarted)
+
+        if (Input.GetKey(KeyCode.E))
         {
-            score += Random.Range(10, 151) * Time.deltaTime;
-            score = Mathf.Round(score);
-            Debug.Log(score);
+            SavePlayerData(money, score, diamonds);
         }
+
+    }
+
+    public void Score()
+    {
+        score += Random.Range(10, 151) * Time.deltaTime;
+        score = Mathf.Round(score);
+        PlayerController.Instance.scoreText.text = string.Format("{0, -15:N0}", score);
 
         /* This is checking if the score is divisible by 150 and if it is not the same as the last time
         the speed was changed. If it is, then the speed is increased by a random amount between 0.01
@@ -121,13 +128,6 @@ public class GameManager : MonoBehaviour
             PlayerController.Instance.moveSpeed += Random.Range(0.01f, 0.5f);
             lastSpeedChangeScore = score;
         }
-
-
-        if (Input.GetKey(KeyCode.E))
-        {
-            SavePlayerData(money, score, diamonds);
-        }
-
     }
 
     public void SetMoney(char m, ulong p)

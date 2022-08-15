@@ -132,10 +132,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9fb7706fc1c14f4f904e444b218d437, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
+  moveSpeed: 5
   jumpForce: 15
-  left: 97
-  right: 100
   jump: 32
   groundCheckPoint: {fileID: 244022959}
   groundCheckRadius: 0.2
@@ -154,7 +152,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 500
+  m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 3
