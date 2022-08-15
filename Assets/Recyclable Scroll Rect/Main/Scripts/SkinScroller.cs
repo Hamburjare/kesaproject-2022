@@ -186,7 +186,7 @@ public class SkinScroller : MonoBehaviour, IRecyclableScrollRectDataSource
         else
         {
             // https://jsontostring.com/
-            string json = "{\"Items\":[{\"price\":0,\"name\":\"Zombie\",\"owned\":true,\"selected\":true},{\"price\":10000,\"name\":\"PirateZombie\",\"owned\":false,\"selected\":false},{\"price\":99999,\"name\":\"Skeleton\",\"owned\":false,\"selected\":false},{\"price\":999999999999,\"name\":\"PirateSkeleton\",\"owned\":false,\"selected\":false}]}";
+            string json = "{\"Items\":[{\"price\":0,\"name\":\"Zombie\",\"owned\":true,\"selected\":true,\"infectionSpeed\":1.0,\"playerSpeed\":1.0,\"jumpForce\":1.0},{\"price\":10000,\"name\":\"PirateZombie\",\"owned\":true,\"selected\":false,\"infectionSpeed\":1.0,\"playerSpeed\":1.0,\"jumpForce\":1.0},{\"price\":99999,\"name\":\"Skeleton\",\"owned\":false,\"selected\":false,\"infectionSpeed\":1.0,\"playerSpeed\":1.0,\"jumpForce\":1.0},{\"price\":999999999999,\"name\":\"PirateSkeleton\",\"owned\":false,\"selected\":false,\"infectionSpeed\":1.0,\"playerSpeed\":1.0,\"jumpForce\":1.0}]}";
             skins = JsonHelper.FromJson<Skins>(json);
             File.WriteAllText(path, json);
         }
